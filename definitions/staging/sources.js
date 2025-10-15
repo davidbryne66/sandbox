@@ -2,43 +2,43 @@
 // Organized by deployment phase for incremental build
 
 const src = {
-  database: dataform.projectConfig.vars.source_project,
-  schema: dataform.projectConfig.vars.source_dataset
+  database: "dna-team-day-2025-20251003",
+  schema: "team_day_2025_adventure_works_oltp"
 };
 
 // ===== Product Reviews =====
-declare({ ...src, name: "Production_ProductReview" });
-declare({ ...src, name: "Production_Product" });
-declare({ ...src, name: "Production_ProductSubcategory" });
-declare({ ...src, name: "Production_ProductCategory" });
+declare({ database: src.database, schema: src.schema, name: "Production_ProductReview" });
+declare({ database: src.database, schema: src.schema, name: "Production_Product" });
+declare({ database: src.database, schema: src.schema, name: "Production_ProductSubcategory" });
+declare({ database: src.database, schema: src.schema, name: "Production_ProductCategory" });
 
 // ===== Product Inventory =====
-declare({ ...src, name: "Production_ProductInventory" });
-declare({ ...src, name: "Production_Location" });
+declare({ database: src.database, schema: src.schema, name: "Production_ProductInventory" });
+declare({ database: src.database, schema: src.schema, name: "Production_Location" });
 
 // ===== Purchases =====
-declare({ ...src, name: "Purchasing_PurchaseOrderHeader" });
-declare({ ...src, name: "Purchasing_PurchaseOrderDetail" });
-declare({ ...src, name: "Purchasing_Vendor" });
-declare({ ...src, name: "Purchasing_ShipMethod" });
-declare({ ...src, name: "HumanResources_Employee" });
-declare({ ...src, name: "Person_Person" });
+declare({ database: src.database, schema: src.schema, name: "Purchasing_PurchaseOrderHeader" });
+declare({ database: src.database, schema: src.schema, name: "Purchasing_PurchaseOrderDetail" });
+declare({ database: src.database, schema: src.schema, name: "Purchasing_Vendor" });
+declare({ database: src.database, schema: src.schema, name: "Purchasing_ShipMethod" });
+declare({ database: src.database, schema: src.schema, name: "HumanResources_Employee" });
+declare({ database: src.database, schema: src.schema, name: "Person_Person" });
 
 // ===== Work Orders =====
-declare({ ...src, name: "Production_WorkOrder" });
-declare({ ...src, name: "Production_ScrapReason" });
+declare({ database: src.database, schema: src.schema, name: "Production_WorkOrder" });
+declare({ database: src.database, schema: src.schema, name: "Production_ScrapReason" });
 
 // ===== Sales =====
-declare({ ...src, name: "Sales_SalesOrderHeader" });
-declare({ ...src, name: "Sales_SalesOrderDetail" });
-declare({ ...src, name: "Sales_Customer" });
-declare({ ...src, name: "Sales_Store" });
-declare({ ...src, name: "Sales_SalesTerritory" });
-declare({ ...src, name: "Sales_SalesPerson" });
-declare({ ...src, name: "Sales_SpecialOffer" });
-declare({ ...src, name: "Sales_SpecialOfferProduct" });
-declare({ ...src, name: "Sales_CreditCard" });
-declare({ ...src, name: "Sales_Currency" });
-declare({ ...src, name: "Person_Address" });
-declare({ ...src, name: "Person_StateProvince" });
-declare({ ...src, name: "Person_CountryRegion" });
+declare({ database: src.database, schema: src.schema, name: "Sales_SalesOrderHeader" });
+declare({ database: src.database, schema: src.schema, name: "Sales_SalesOrderDetail" });
+declare({ database: src.database, schema: src.schema, name: "Sales_Customer" });
+declare({ database: src.database, schema: src.schema, name: "Sales_Store" });
+declare({ database: src.database, schema: src.schema, name: "Sales_SalesTerritory" });
+declare({ database: src.database, schema: src.schema, name: "Sales_SalesPerson" });
+declare({ database: src.database, schema: src.schema, name: "Sales_SpecialOffer" });
+declare({ database: src.database, schema: src.schema, name: "Sales_SpecialOfferProduct" });
+declare({ database: src.database, schema: src.schema, name: "Sales_CreditCard" });
+declare({ database: src.database, schema: src.schema, name: "Sales_Currency" });
+declare({ database: src.database, schema: src.schema, name: "Person_Address" });
+declare({ database: src.database, schema: src.schema, name: "Person_StateProvince" });
+declare({ database: src.database, schema: src.schema, name: "Person_CountryRegion" });
