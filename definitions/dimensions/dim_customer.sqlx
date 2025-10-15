@@ -1,0 +1,26 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Customer dimension",
+  tags: ["dimension", "phase5"],
+  assertions: {
+    uniqueKey: ["customer_key"],
+    nonNull: ["customer_key"]
+  }
+}
+
+SELECT
+  c.CustomerID AS customer_key,
+  c.CustomerID AS customer_id,
+  c.AccountNumber AS account_number,
+  c.PersonID AS person_id,
+  c.StoreID AS store_id,
+  c.TerritoryID AS territory_id,
+  CONCAT(COALESCE(p.FirstName, ''), ' ', COALESCE(p.LastName, '')) AS customer_name,
+  p.PersonType AS person_type,
+  s.Name AS store_name,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Sales_Customer')} c
+LEFT JOIN ${ref('Person_Person')} p ON c.PersonID = p.BusinessEntityID
+LEFT JOIN ${ref('Sales_Store')} s ON c.StoreID = s.BusinessEntityID
+

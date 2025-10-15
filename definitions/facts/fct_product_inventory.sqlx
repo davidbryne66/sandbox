@@ -1,0 +1,24 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Product inventory snapshot fact table",
+  tags: ["fact", "phase2"],
+  dependencies: ["dim_product", "dim_location"],
+  assertions: {
+    nonNull: ["product_key", "location_key"]
+  }
+}
+
+SELECT
+  CONCAT(CAST(pi.ProductID AS STRING), '-', CAST(pi.LocationID AS STRING)) AS inventory_key,
+  COALESCE(dp.product_key, -1) AS product_key,
+  COALESCE(dl.location_key, -1) AS location_key,
+  CAST(FORMAT_DATE('%Y%m%d', CURRENT_DATE()) AS INT64) AS snapshot_date_key,
+  pi.Quantity AS quantity_on_hand,
+  pi.Shelf AS shelf,
+  pi.Bin AS bin_number,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Production_ProductInventory')} pi
+LEFT JOIN ${ref('dim_product')} dp ON pi.ProductID = dp.product_id
+LEFT JOIN ${ref('dim_location')} dl ON pi.LocationID = dl.location_id
+

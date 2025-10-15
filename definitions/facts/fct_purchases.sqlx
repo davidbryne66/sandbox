@@ -1,0 +1,40 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Purchase order fact table",
+  tags: ["fact", "phase3"],
+  dependencies: ["dim_product", "dim_vendor", "dim_employee", "dim_ship_method"],
+  assertions: {
+    nonNull: ["purchase_order_key", "product_key"]
+  }
+}
+
+SELECT
+  pod.PurchaseOrderDetailID AS purchase_order_key,
+  pod.PurchaseOrderID AS purchase_order_id,
+  COALESCE(dp.product_key, -1) AS product_key,
+  COALESCE(dv.vendor_key, -1) AS vendor_key,
+  COALESCE(de.employee_key, -1) AS employee_key,
+  COALESCE(dsm.ship_method_key, -1) AS ship_method_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(poh.OrderDate)) AS INT64) AS order_date_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(poh.ShipDate)) AS INT64) AS ship_date_key,
+  pod.OrderQty AS order_quantity,
+  pod.UnitPrice AS unit_price,
+  pod.LineTotal AS line_total,
+  pod.ReceivedQty AS received_quantity,
+  pod.RejectedQty AS rejected_quantity,
+  pod.StockedQty AS stocked_quantity,
+  poh.SubTotal AS order_subtotal,
+  poh.TaxAmt AS tax_amount,
+  poh.Freight AS freight,
+  poh.TotalDue AS total_due,
+  poh.Status AS order_status,
+  poh.RevisionNumber AS revision_number,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Purchasing_PurchaseOrderDetail')} pod
+INNER JOIN ${ref('Purchasing_PurchaseOrderHeader')} poh ON pod.PurchaseOrderID = poh.PurchaseOrderID
+LEFT JOIN ${ref('dim_product')} dp ON pod.ProductID = dp.product_id
+LEFT JOIN ${ref('dim_vendor')} dv ON poh.VendorID = dv.business_entity_id
+LEFT JOIN ${ref('dim_employee')} de ON poh.EmployeeID = de.business_entity_id
+LEFT JOIN ${ref('dim_ship_method')} dsm ON poh.ShipMethodID = dsm.ship_method_id
+

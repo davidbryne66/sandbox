@@ -1,0 +1,55 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Sales fact table - order line items",
+  tags: ["fact", "phase5"],
+  dependencies: ["dim_customer", "dim_product", "dim_territory", "dim_salesperson", 
+                 "dim_ship_method", "dim_special_offer", "dim_credit_card", "dim_address"],
+  assertions: {
+    nonNull: ["sales_order_detail_id", "product_key"]
+  }
+}
+
+SELECT
+  sod.SalesOrderDetailID AS sales_order_detail_id,
+  sod.SalesOrderID AS sales_order_id,
+  soh.SalesOrderNumber AS sales_order_number,
+  COALESCE(dc.customer_key, -1) AS customer_key,
+  COALESCE(dp.product_key, -1) AS product_key,
+  COALESCE(dt.territory_key, -1) AS territory_key,
+  COALESCE(dsp.salesperson_key, -1) AS salesperson_key,
+  COALESCE(dsm.ship_method_key, -1) AS ship_method_key,
+  COALESCE(dso.special_offer_key, -1) AS special_offer_key,
+  COALESCE(dcc.credit_card_key, -1) AS credit_card_key,
+  COALESCE(da_bill.address_key, -1) AS bill_to_address_key,
+  COALESCE(da_ship.address_key, -1) AS ship_to_address_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(soh.OrderDate)) AS INT64) AS order_date_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(soh.DueDate)) AS INT64) AS due_date_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(soh.ShipDate)) AS INT64) AS ship_date_key,
+  sod.OrderQty AS order_quantity,
+  sod.UnitPrice AS unit_price,
+  sod.UnitPriceDiscount AS unit_price_discount,
+  sod.LineTotal AS line_total,
+  soh.SubTotal AS order_subtotal,
+  soh.TaxAmt AS tax_amount,
+  soh.Freight AS freight,
+  soh.TotalDue AS total_due,
+  sod.OrderQty * sod.UnitPrice * sod.UnitPriceDiscount AS discount_amount,
+  soh.OnlineOrderFlag AS is_online_order,
+  soh.Status AS order_status,
+  soh.PurchaseOrderNumber AS purchase_order_number,
+  soh.AccountNumber AS account_number,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Sales_SalesOrderDetail')} sod
+INNER JOIN ${ref('Sales_SalesOrderHeader')} soh ON sod.SalesOrderID = soh.SalesOrderID
+LEFT JOIN ${ref('dim_customer')} dc ON soh.CustomerID = dc.customer_id
+LEFT JOIN ${ref('dim_product')} dp ON sod.ProductID = dp.product_id
+LEFT JOIN ${ref('dim_territory')} dt ON soh.TerritoryID = dt.territory_id
+LEFT JOIN ${ref('dim_salesperson')} dsp ON soh.SalesPersonID = dsp.business_entity_id
+LEFT JOIN ${ref('dim_ship_method')} dsm ON soh.ShipMethodID = dsm.ship_method_id
+LEFT JOIN ${ref('Sales_SpecialOfferProduct')} sop ON sod.SpecialOfferID = sop.SpecialOfferID AND sod.ProductID = sop.ProductID
+LEFT JOIN ${ref('dim_special_offer')} dso ON sop.SpecialOfferID = dso.special_offer_id
+LEFT JOIN ${ref('dim_credit_card')} dcc ON soh.CreditCardID = dcc.credit_card_id
+LEFT JOIN ${ref('dim_address')} da_bill ON soh.BillToAddressID = da_bill.address_id
+LEFT JOIN ${ref('dim_address')} da_ship ON soh.ShipToAddressID = da_ship.address_id
+

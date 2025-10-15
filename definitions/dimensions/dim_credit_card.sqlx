@@ -1,0 +1,21 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Credit card dimension",
+  tags: ["dimension", "phase5"],
+  assertions: {
+    uniqueKey: ["credit_card_key"],
+    nonNull: ["credit_card_key", "card_type"]
+  }
+}
+
+SELECT
+  cc.CreditCardID AS credit_card_key,
+  cc.CreditCardID AS credit_card_id,
+  cc.CardType AS card_type,
+  cc.CardNumber AS card_number_masked,
+  cc.ExpMonth AS exp_month,
+  cc.ExpYear AS exp_year,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Sales_CreditCard')} cc
+

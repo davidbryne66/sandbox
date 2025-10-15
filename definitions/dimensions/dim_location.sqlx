@@ -1,0 +1,20 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Location dimension - manufacturing/warehouse locations",
+  tags: ["dimension", "phase2"],
+  assertions: {
+    uniqueKey: ["location_key"],
+    nonNull: ["location_key", "location_name"]
+  }
+}
+
+SELECT
+  l.LocationID AS location_key,
+  l.LocationID AS location_id,
+  l.Name AS location_name,
+  l.CostRate AS cost_rate,
+  l.Availability AS availability,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Production_Location')} l
+

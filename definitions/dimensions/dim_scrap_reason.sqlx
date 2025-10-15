@@ -1,0 +1,18 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Scrap reason dimension - manufacturing defects",
+  tags: ["dimension", "phase4"],
+  assertions: {
+    uniqueKey: ["scrap_reason_key"],
+    nonNull: ["scrap_reason_key", "scrap_reason_name"]
+  }
+}
+
+SELECT
+  sr.ScrapReasonID AS scrap_reason_key,
+  sr.ScrapReasonID AS scrap_reason_id,
+  sr.Name AS scrap_reason_name,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Production_ScrapReason')} sr
+

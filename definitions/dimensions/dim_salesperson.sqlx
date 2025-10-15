@@ -1,0 +1,27 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Salesperson dimension",
+  tags: ["dimension", "phase5"],
+  assertions: {
+    uniqueKey: ["salesperson_key"],
+    nonNull: ["salesperson_key"]
+  }
+}
+
+SELECT
+  sp.BusinessEntityID AS salesperson_key,
+  sp.BusinessEntityID AS business_entity_id,
+  sp.TerritoryID AS territory_id,
+  sp.SalesQuota AS sales_quota,
+  sp.Bonus AS bonus,
+  sp.CommissionPct AS commission_pct,
+  sp.SalesYTD AS sales_ytd,
+  sp.SalesLastYear AS sales_last_year,
+  CONCAT(COALESCE(p.FirstName, ''), ' ', COALESCE(p.LastName, '')) AS salesperson_name,
+  e.JobTitle AS job_title,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Sales_SalesPerson')} sp
+LEFT JOIN ${ref('Person_Person')} p ON sp.BusinessEntityID = p.BusinessEntityID
+LEFT JOIN ${ref('HumanResources_Employee')} e ON sp.BusinessEntityID = e.BusinessEntityID
+

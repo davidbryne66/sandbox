@@ -1,0 +1,22 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Sales territory dimension",
+  tags: ["dimension", "phase5"],
+  assertions: {
+    uniqueKey: ["territory_key"],
+    nonNull: ["territory_key", "territory_name"]
+  }
+}
+
+SELECT
+  st.TerritoryID AS territory_key,
+  st.TerritoryID AS territory_id,
+  st.Name AS territory_name,
+  st.CountryRegionCode AS country_code,
+  st.Group AS territory_group,
+  cr.Name AS country_name,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Sales_SalesTerritory')} st
+LEFT JOIN ${ref('Person_CountryRegion')} cr ON st.CountryRegionCode = cr.CountryRegionCode
+

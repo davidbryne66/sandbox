@@ -1,0 +1,22 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Vendor dimension - suppliers",
+  tags: ["dimension", "phase3"],
+  assertions: {
+    uniqueKey: ["vendor_key"],
+    nonNull: ["vendor_key", "vendor_name"]
+  }
+}
+
+SELECT
+  v.BusinessEntityID AS vendor_key,
+  v.BusinessEntityID AS business_entity_id,
+  v.AccountNumber AS account_number,
+  v.Name AS vendor_name,
+  v.CreditRating AS credit_rating,
+  v.PreferredVendorStatus AS is_preferred_vendor,
+  v.ActiveFlag AS is_active,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Purchasing_Vendor')} v
+

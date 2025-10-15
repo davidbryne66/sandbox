@@ -1,0 +1,27 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Address dimension",
+  tags: ["dimension", "phase5"],
+  assertions: {
+    uniqueKey: ["address_key"],
+    nonNull: ["address_key"]
+  }
+}
+
+SELECT
+  a.AddressID AS address_key,
+  a.AddressID AS address_id,
+  a.AddressLine1 AS address_line1,
+  a.AddressLine2 AS address_line2,
+  a.City AS city,
+  sp.StateProvinceCode AS state_province_code,
+  sp.Name AS state_province_name,
+  sp.CountryRegionCode AS country_code,
+  cr.Name AS country_name,
+  a.PostalCode AS postal_code,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Person_Address')} a
+LEFT JOIN ${ref('Person_StateProvince')} sp ON a.StateProvinceID = sp.StateProvinceID
+LEFT JOIN ${ref('Person_CountryRegion')} cr ON sp.CountryRegionCode = cr.CountryRegionCode
+

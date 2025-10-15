@@ -2,3 +2,7 @@ defaultProject: dna-team-day-2025-20251003
 defaultDataset: team_4
 defaultLocation: US
 dataformCoreVersion: 3.0.26
+
+vars:
+  source_project: dna-team-day-2025-20251003
+  source_dataset: team_day_2025_adventure_works_oltp

@@ -1,0 +1,30 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Employee dimension",
+  tags: ["dimension", "phase3"],
+  assertions: {
+    uniqueKey: ["employee_key"],
+    nonNull: ["employee_key"]
+  }
+}
+
+SELECT
+  e.BusinessEntityID AS employee_key,
+  e.BusinessEntityID AS business_entity_id,
+  e.NationalIDNumber AS national_id,
+  e.LoginID AS login_id,
+  e.JobTitle AS job_title,
+  e.BirthDate AS birth_date,
+  e.MaritalStatus AS marital_status,
+  e.Gender AS gender,
+  e.HireDate AS hire_date,
+  e.SalariedFlag AS is_salaried,
+  e.VacationHours AS vacation_hours,
+  e.SickLeaveHours AS sick_leave_hours,
+  e.CurrentFlag AS is_current,
+  CONCAT(COALESCE(p.FirstName, ''), ' ', COALESCE(p.LastName, '')) AS full_name,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('HumanResources_Employee')} e
+LEFT JOIN ${ref('Person_Person')} p ON e.BusinessEntityID = p.BusinessEntityID
+

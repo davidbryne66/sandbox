@@ -1,0 +1,30 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Work order fact table - manufacturing",
+  tags: ["fact", "phase4"],
+  dependencies: ["dim_product", "dim_scrap_reason"],
+  assertions: {
+    nonNull: ["work_order_key", "product_key"]
+  }
+}
+
+SELECT
+  wo.WorkOrderID AS work_order_key,
+  wo.WorkOrderID AS work_order_id,
+  COALESCE(dp.product_key, -1) AS product_key,
+  COALESCE(dsr.scrap_reason_key, -1) AS scrap_reason_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(wo.StartDate)) AS INT64) AS start_date_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(wo.EndDate)) AS INT64) AS end_date_key,
+  CAST(FORMAT_DATE('%Y%m%d', DATE(wo.DueDate)) AS INT64) AS due_date_key,
+  wo.OrderQty AS order_quantity,
+  wo.StockedQty AS stocked_quantity,
+  wo.ScrappedQty AS scrapped_quantity,
+  wo.OrderQty - wo.ScrappedQty AS good_quantity,
+  SAFE_DIVIDE(wo.ScrappedQty, wo.OrderQty) AS scrap_rate,
+  DATE_DIFF(DATE(wo.EndDate), DATE(wo.StartDate), DAY) AS production_days,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Production_WorkOrder')} wo
+LEFT JOIN ${ref('dim_product')} dp ON wo.ProductID = dp.product_id
+LEFT JOIN ${ref('dim_scrap_reason')} dsr ON wo.ScrapReasonID = dsr.scrap_reason_id
+
