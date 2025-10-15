@@ -1,0 +1,28 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Product dimension with category hierarchy",
+  tags: ["dimension"],
+  assertions: {
+    uniqueKey: ["product_key"],
+    nonNull: ["product_key", "product_name"]
+  }
+}
+
+SELECT
+  p.ProductID AS product_key,
+  p.ProductID AS product_id,
+  p.Name AS product_name,
+  p.ProductNumber AS product_number,
+  COALESCE(p.Color, 'N/A') AS color,
+  p.ListPrice AS list_price,
+  p.StandardCost AS standard_cost,
+  ps.ProductSubcategoryID AS subcategory_id,
+  ps.Name AS subcategory_name,
+  pc.ProductCategoryID AS category_id,
+  pc.Name AS category_name
+FROM ${ref('Production_Product')} p
+LEFT JOIN ${ref('Production_ProductSubcategory')} ps 
+  ON p.ProductSubcategoryID = ps.ProductSubcategoryID
+LEFT JOIN ${ref('Production_ProductCategory')} pc 
+  ON ps.ProductCategoryID = pc.ProductCategoryID

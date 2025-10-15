@@ -1,0 +1,27 @@
+config {
+  type: "table",
+  schema: "team_4",
+  description: "Product reviews fact table",
+  dependencies: ["dim_product"],
+  tags: ["fact"],
+  assertions: {
+    nonNull: ["product_key", "rating"]
+  }
+}
+
+SELECT
+  pr.ProductReviewID AS review_key,
+  COALESCE(dp.product_key, -1) AS product_key,
+  pr.ReviewDate AS review_date,
+  pr.ReviewerName AS reviewer_name,
+  pr.Rating AS rating,
+  pr.Comments AS comments,
+  LENGTH(pr.Comments) AS comment_length,
+  CASE
+    WHEN pr.Rating >= 4 THEN 'Positive'
+    WHEN pr.Rating = 3 THEN 'Neutral'
+    ELSE 'Negative'
+  END AS sentiment,
+  CURRENT_TIMESTAMP() AS loaded_at
+FROM ${ref('Production_ProductReview')} pr
+LEFT JOIN ${ref('dim_product')} dp ON pr.ProductID = dp.product_id
