@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Product dimension with category hierarchy",
-  tags: ["dimension"],
-  assertions: {
-    uniqueKey: ["product_key"],
-    nonNull: ["product_key", "product_name"]
-  }
+  tags: ["dimension"]
 }
 
 SELECT

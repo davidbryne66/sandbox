@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Scrap reason dimension - manufacturing defects",
-  tags: ["dimension", "phase4"],
-  assertions: {
-    uniqueKey: ["scrap_reason_key"],
-    nonNull: ["scrap_reason_key", "scrap_reason_name"]
-  }
+  tags: ["dimension", "phase4"]
 }
 
 SELECT

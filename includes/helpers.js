@@ -1,15 +1,15 @@
-// Shared helper functions (add as needed during hackathon)
+// Shared helper functions
 
-// Example: Source config shorthand
+// Source config shorthand
 function sourceRef(tableName) {
   return {
-    database: dataform.projectConfig.vars.source_project,
-    schema: dataform.projectConfig.vars.source_dataset,
+    database: "dna-team-day-2025-20251003",
+    schema: "team_day_2025_adventure_works_oltp",
     name: tableName
   };
 }
 
-// Example: Standard assertions for dimensions
+// Standard assertions for dimensions
 function dimAssertions(keyColumn, nameColumn) {
   return {
     uniqueKey: [keyColumn],

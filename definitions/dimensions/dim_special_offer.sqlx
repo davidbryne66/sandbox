@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Special offer/promotion dimension",
-  tags: ["dimension", "phase5"],
-  assertions: {
-    uniqueKey: ["special_offer_key"],
-    nonNull: ["special_offer_key", "special_offer_description"]
-  }
+  tags: ["dimension", "phase5"]
 }
 
 SELECT

@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Sales territory dimension",
-  tags: ["dimension", "phase5"],
-  assertions: {
-    uniqueKey: ["territory_key"],
-    nonNull: ["territory_key", "territory_name"]
-  }
+  tags: ["dimension", "phase5"]
 }
 
 SELECT

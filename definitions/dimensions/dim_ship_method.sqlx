@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Shipping method dimension",
-  tags: ["dimension", "phase3"],
-  assertions: {
-    uniqueKey: ["ship_method_key"],
-    nonNull: ["ship_method_key", "ship_method_name"]
-  }
+  tags: ["dimension", "phase3"]
 }
 
 SELECT

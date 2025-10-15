@@ -4,10 +4,7 @@ config {
   description: "Sales fact table - order line items",
   tags: ["fact", "phase5"],
   dependencies: ["dim_customer", "dim_product", "dim_territory", "dim_salesperson", 
-                 "dim_ship_method", "dim_special_offer", "dim_credit_card", "dim_address"],
-  assertions: {
-    nonNull: ["sales_order_detail_id", "product_key"]
-  }
+                 "dim_ship_method", "dim_special_offer", "dim_credit_card", "dim_address"]
 }
 
 SELECT

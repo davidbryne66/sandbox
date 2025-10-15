@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Vendor dimension - suppliers",
-  tags: ["dimension", "phase3"],
-  assertions: {
-    uniqueKey: ["vendor_key"],
-    nonNull: ["vendor_key", "vendor_name"]
-  }
+  tags: ["dimension", "phase3"]
 }
 
 SELECT

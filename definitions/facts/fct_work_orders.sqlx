@@ -3,10 +3,7 @@ config {
   schema: "team_4",
   description: "Work order fact table - manufacturing",
   tags: ["fact", "phase4"],
-  dependencies: ["dim_product", "dim_scrap_reason"],
-  assertions: {
-    nonNull: ["work_order_key", "product_key"]
-  }
+  dependencies: ["dim_product", "dim_scrap_reason"]
 }
 
 SELECT

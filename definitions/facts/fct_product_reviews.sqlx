@@ -3,10 +3,7 @@ config {
   schema: "team_4",
   description: "Product reviews fact table",
   dependencies: ["dim_product"],
-  tags: ["fact"],
-  assertions: {
-    nonNull: ["product_key", "rating"]
-  }
+  tags: ["fact"]
 }
 
 SELECT

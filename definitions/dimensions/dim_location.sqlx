@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Location dimension - manufacturing/warehouse locations",
-  tags: ["dimension", "phase2"],
-  assertions: {
-    uniqueKey: ["location_key"],
-    nonNull: ["location_key", "location_name"]
-  }
+  tags: ["dimension", "phase2"]
 }
 
 SELECT

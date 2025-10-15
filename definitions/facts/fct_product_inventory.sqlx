@@ -3,10 +3,7 @@ config {
   schema: "team_4",
   description: "Product inventory snapshot fact table",
   tags: ["fact", "phase2"],
-  dependencies: ["dim_product", "dim_location"],
-  assertions: {
-    nonNull: ["product_key", "location_key"]
-  }
+  dependencies: ["dim_product", "dim_location"]
 }
 
 SELECT

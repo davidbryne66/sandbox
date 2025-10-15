@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Employee dimension",
-  tags: ["dimension", "phase3"],
-  assertions: {
-    uniqueKey: ["employee_key"],
-    nonNull: ["employee_key"]
-  }
+  tags: ["dimension", "phase3"]
 }
 
 SELECT

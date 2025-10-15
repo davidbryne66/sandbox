@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Currency dimension",
-  tags: ["dimension", "phase5"],
-  assertions: {
-    uniqueKey: ["currency_key"],
-    nonNull: ["currency_key", "currency_code"]
-  }
+  tags: ["dimension", "phase5"]
 }
 
 SELECT

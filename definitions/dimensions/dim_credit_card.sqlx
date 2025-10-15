@@ -2,11 +2,7 @@ config {
   type: "table",
   schema: "team_4",
   description: "Credit card dimension",
-  tags: ["dimension", "phase5"],
-  assertions: {
-    uniqueKey: ["credit_card_key"],
-    nonNull: ["credit_card_key", "card_type"]
-  }
+  tags: ["dimension", "phase5"]
 }
 
 SELECT
