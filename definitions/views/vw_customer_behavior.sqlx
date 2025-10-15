@@ -1,0 +1,36 @@
+config {
+  type: "view",
+  schema: "team_4",
+  description: "Customer behavior metrics for ML",
+  tags: ["view", "ml"]
+}
+
+SELECT
+  c.customer_key,
+  c.customer_name,
+  c.person_type,
+  c.store_name,
+  t.territory_name,
+  t.country_name,
+  COUNT(DISTINCT s.sales_order_id) AS total_orders,
+  SUM(s.order_quantity) AS total_items_purchased,
+  SUM(s.line_total) AS total_spent,
+  AVG(s.line_total) AS avg_order_value,
+  SUM(CASE WHEN s.is_online_order THEN 1 ELSE 0 END) AS online_order_count,
+  SUM(CASE WHEN NOT s.is_online_order THEN 1 ELSE 0 END) AS offline_order_count,
+  COUNT(DISTINCT s.product_key) AS unique_products_purchased,
+  MIN(dd.full_date) AS first_order_date,
+  MAX(dd.full_date) AS last_order_date,
+  DATE_DIFF(MAX(dd.full_date), MIN(dd.full_date), DAY) AS customer_lifetime_days
+FROM ${ref('dim_customer')} c
+LEFT JOIN ${ref('fct_sales')} s ON c.customer_key = s.customer_key
+LEFT JOIN ${ref('dim_date')} dd ON s.order_date_key = dd.date_key
+LEFT JOIN ${ref('dim_territory')} t ON c.territory_id = t.territory_id
+GROUP BY
+  c.customer_key,
+  c.customer_name,
+  c.person_type,
+  c.store_name,
+  t.territory_name,
+  t.country_name
+

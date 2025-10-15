@@ -1,0 +1,58 @@
+config {
+  type: "view",
+  schema: "team_4",
+  description: "Denormalized sales view for ML models",
+  tags: ["view", "ml"]
+}
+
+SELECT
+  f.sales_order_detail_id,
+  f.sales_order_id,
+  f.sales_order_number,
+  f.order_date_key,
+  dd.full_date AS order_date,
+  dd.year AS order_year,
+  dd.month_number AS order_month,
+  dd.quarter AS order_quarter,
+  dd.is_weekend AS is_weekend_order,
+  c.customer_name,
+  c.person_type,
+  c.store_name,
+  p.product_name,
+  p.product_number,
+  p.color,
+  p.category_name,
+  p.subcategory_name,
+  p.list_price AS product_list_price,
+  p.standard_cost AS product_cost,
+  t.territory_name,
+  t.territory_group,
+  t.country_name,
+  sp.salesperson_name,
+  sp.job_title AS salesperson_title,
+  so.special_offer_description,
+  so.discount_pct,
+  so.offer_type,
+  sm.ship_method_name,
+  cc.card_type,
+  f.order_quantity,
+  f.unit_price,
+  f.unit_price_discount,
+  f.line_total,
+  f.discount_amount,
+  f.is_online_order,
+  f.order_status,
+  f.order_subtotal,
+  f.tax_amount,
+  f.freight,
+  f.total_due
+FROM ${ref('fct_sales')} f
+LEFT JOIN ${ref('dim_date')} dd ON f.order_date_key = dd.date_key
+LEFT JOIN ${ref('dim_customer')} c ON f.customer_key = c.customer_key
+LEFT JOIN ${ref('dim_product')} p ON f.product_key = p.product_key
+LEFT JOIN ${ref('dim_territory')} t ON f.territory_key = t.territory_key
+LEFT JOIN ${ref('dim_salesperson')} sp ON f.salesperson_key = sp.salesperson_key
+LEFT JOIN ${ref('dim_special_offer')} so ON f.special_offer_key = so.special_offer_key
+LEFT JOIN ${ref('dim_ship_method')} sm ON f.ship_method_key = sm.ship_method_key
+LEFT JOIN ${ref('dim_credit_card')} cc ON f.credit_card_key = cc.credit_card_key
+

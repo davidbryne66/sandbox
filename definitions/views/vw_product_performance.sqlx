@@ -1,0 +1,39 @@
+config {
+  type: "view",
+  schema: "team_4",
+  description: "Product performance metrics for ML",
+  tags: ["view", "ml"]
+}
+
+SELECT
+  p.product_key,
+  p.product_name,
+  p.product_number,
+  p.color,
+  p.category_name,
+  p.subcategory_name,
+  p.list_price,
+  p.standard_cost,
+  COUNT(DISTINCT s.sales_order_id) AS total_orders,
+  SUM(s.order_quantity) AS total_quantity_sold,
+  SUM(s.line_total) AS total_revenue,
+  AVG(s.unit_price) AS avg_selling_price,
+  AVG(r.rating) AS avg_rating,
+  COUNT(r.review_key) AS review_count,
+  SUM(CASE WHEN r.sentiment = 'Positive' THEN 1 ELSE 0 END) AS positive_reviews,
+  SUM(CASE WHEN r.sentiment = 'Negative' THEN 1 ELSE 0 END) AS negative_reviews,
+  SUM(i.quantity_on_hand) AS total_inventory
+FROM ${ref('dim_product')} p
+LEFT JOIN ${ref('fct_sales')} s ON p.product_key = s.product_key
+LEFT JOIN ${ref('fct_product_reviews')} r ON p.product_key = r.product_key
+LEFT JOIN ${ref('fct_product_inventory')} i ON p.product_key = i.product_key
+GROUP BY 
+  p.product_key,
+  p.product_name,
+  p.product_number,
+  p.color,
+  p.category_name,
+  p.subcategory_name,
+  p.list_price,
+  p.standard_cost
+

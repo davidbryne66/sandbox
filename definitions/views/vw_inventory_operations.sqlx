@@ -1,0 +1,49 @@
+config {
+  type: "view",
+  schema: "team_4",
+  description: "Inventory and operations metrics for ML",
+  tags: ["view", "ml"]
+}
+
+SELECT
+  p.product_key,
+  p.product_name,
+  p.category_name,
+  p.subcategory_name,
+  l.location_name,
+  l.location_id,
+  i.quantity_on_hand,
+  i.shelf,
+  i.bin_number,
+  COALESCE(w.total_work_orders, 0) AS total_work_orders,
+  COALESCE(w.total_quantity_produced, 0) AS total_quantity_produced,
+  COALESCE(w.total_scrapped, 0) AS total_scrapped,
+  COALESCE(w.avg_scrap_rate, 0) AS avg_scrap_rate,
+  COALESCE(w.avg_production_days, 0) AS avg_production_days,
+  COALESCE(pur.total_purchases, 0) AS total_purchases,
+  COALESCE(pur.total_purchased_qty, 0) AS total_purchased_qty,
+  COALESCE(pur.avg_purchase_price, 0) AS avg_purchase_price
+FROM ${ref('fct_product_inventory')} i
+INNER JOIN ${ref('dim_product')} p ON i.product_key = p.product_key
+INNER JOIN ${ref('dim_location')} l ON i.location_key = l.location_key
+LEFT JOIN (
+  SELECT 
+    product_key,
+    COUNT(*) AS total_work_orders,
+    SUM(order_quantity) AS total_quantity_produced,
+    SUM(scrapped_quantity) AS total_scrapped,
+    AVG(scrap_rate) AS avg_scrap_rate,
+    AVG(production_days) AS avg_production_days
+  FROM ${ref('fct_work_orders')}
+  GROUP BY product_key
+) w ON p.product_key = w.product_key
+LEFT JOIN (
+  SELECT
+    product_key,
+    COUNT(*) AS total_purchases,
+    SUM(order_quantity) AS total_purchased_qty,
+    AVG(unit_price) AS avg_purchase_price
+  FROM ${ref('fct_purchases')}
+  GROUP BY product_key
+) pur ON p.product_key = pur.product_key
+
